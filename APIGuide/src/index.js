@@ -3,9 +3,9 @@ let JWT = null;
 
 const regButton = document.getElementById("regBtn");
 regButton.addEventListener("click", () => {
-  fetch("http://hackhouse.sh:3000/register", {
+  fetch("https://cab230.hackhouse.sh/register", {
     method: "POST",
-    body: 'email=xxxxx%40xxxx.xxx&password=xxxxxxx',
+    body: 'email=N10205144%40qut.edu.au&password=bubblewrap', //TODO: enter from form, not manually
     headers: {
       "Content-type": "application/x-www-form-urlencoded"
     }
@@ -28,9 +28,9 @@ regButton.addEventListener("click", () => {
 
 const logButton = document.getElementById("logBtn");
 logButton.addEventListener("click", () => {
-    fetch("http://hackhouse.sh:3000/login", {
+    fetch("https://cab230.hackhouse.sh/login", {
         method: "POST",
-        body: 'email=xxxxx%40xxxx.xxx&password=xxxxxxx',
+        body: 'email=N10205144%40qut.edu.au&password=bubblewrap',
         headers: {
             "Content-type": "application/x-www-form-urlencoded"
         }
@@ -53,7 +53,7 @@ logButton.addEventListener("click", () => {
 
 const offButton = document.getElementById("offBtn");
 offButton.addEventListener("click", () => {
-    fetch("http://hackhouse.sh:3000/offences")
+    fetch("https://cab230.hackhouse.sh/offences")
         .then(function(response) {
             if (response.ok) {
                 return response.json();
@@ -78,8 +78,8 @@ searchButton.addEventListener("click", () => {
     getParam.headers = head;
 
     //The URL
-    const baseUrl = "http://hackhouse.sh:3000/search?";
-    const query = 'offence=Homicide (Murder)';
+    const baseUrl = "https://cab230.hackhouse.sh/search?";
+    const query = 'offence=Armed Robbery';
     const url = baseUrl + query;
 
     fetch(encodeURI(url),getParam)
@@ -95,6 +95,48 @@ searchButton.addEventListener("click", () => {
         })
         .catch(function(error) {
                 console.log("There has been a problem with your fetch operation: ",error.message);
-            });
+        });
 });
+
+const filterDiv= document.getElementById("filter");
+filterDiv.addEventListener("click", (event) => {
+    const param = event.target.innerHTML; 
+    let filter = ""; 
+
+    //Example filter strings
+    if (param === "area") {
+        filter = "area=Moreton Bay Regional Council";
+    } else if (param === "age") {
+        filter = "age=Juvenile"
+    } else if (param === "year") { 
+        filter = "year=2006,2007,2008";
+    }  
+    
+    //The parameters of the call
+    let getParam = { method: "GET" };
+    let head = { Authorization: `Bearer ${JWT}` };
+    getParam.headers = head;
+
+    //The URL
+    const baseUrl = "https://cab230.hackhouse.sh/search?";
+    const query = 'offence=Armed Robbery';
+
+    const url = baseUrl + query + "&" + filter;
+
+    fetch(encodeURI(url),getParam)
+        .then(function(response) {
+            if (response.ok) {
+                return response.json();
+            }
+            throw new Error("Network response was not ok.");
+        })
+        .then(function(result) {
+            let appDiv = document.getElementById("app");
+            appDiv.innerHTML = JSON.stringify(result);
+        })
+        .catch(function(error) {
+                console.log("There has been a problem with your fetch operation: ",error.message);
+        }); 
+}); 
+
 
