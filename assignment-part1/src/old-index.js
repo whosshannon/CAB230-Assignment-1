@@ -1,4 +1,4 @@
-
+import "./styles.css"
 let JWT = null;
 
 const regButton = document.getElementById("regBtn");
@@ -138,5 +138,3 @@ filterDiv.addEventListener("click", (event) => {
                 console.log("There has been a problem with your fetch operation: ",error.message);
         }); 
 }); 
-
-
