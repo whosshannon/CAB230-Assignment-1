@@ -1,12 +1,13 @@
 import React , {useState} from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
+import {AppRouter} from './test-routers';
 
 let JWT = null;
 
 const registerBtn = document.getElementById("regBtn");
 registerBtn.addEventListener("click", () => {
-    //TODO: add fetch, not here for simplicity
+    //TODO: add fetch, not here for simplicity atm
     //TODO: note, this is where we would use react router
 })
 const loginBtn = document.getElementById("logBtn");
@@ -35,45 +36,45 @@ loginBtn.addEventListener("click", () => {
         });
 })
 
-function OffencesApp(props) {
-    return (
-        <div className="OffencesApp">
-        <table>
-            <thead><tr><th>Offences</th></tr></thead>
-            <tbody>
-            {props.offences.map((offence) =>(
-                <tr key={offence}><td>{offence}</td></tr>
-            ))}
-            </tbody>
-        </table>
-        </div>
-    );
-}
+// function OffencesApp(props) { //DEBUG:
+//     return (
+//         <div className="OffencesApp">
+//         <table>
+//             <thead><tr><th>Offences</th></tr></thead>
+//             <tbody>
+//             {props.offences.map((offence) =>(
+//                 <tr key={offence}><td>{offence}</td></tr>
+//             ))}
+//             </tbody>
+//         </table>
+//         </div>
+//     );
+// }
 
-const offencesBtn = document.getElementById("offBtn");
-offencesBtn.addEventListener("click", () => {
-    //TODO: we would also use react router here
-    //TODO: render to that DOM boi
+// const offencesBtn = document.getElementById("offBtn");
+// offencesBtn.addEventListener("click", () => {
+//     //TODO: we would also use react router here
+//     //TODO: render to that DOM boi
 
-    fetch("https://cab230.hackhouse.sh/offences")
-    .then((response) => {
-        if (response.ok) {
-            return response.json();
-        }
-        throw new Error("Network response was not ok.");
-    })
-    .then((result) => {
-        return (result.offences)
-    })
-    .then((offences) => {
-        let appDiv = document.getElementById("app");
-        //appDiv.innerHTML = JSON.stringify(offences);
-        ReactDOM.render(<OffencesApp offences={offences}/>, appDiv);
-    })
-    .catch((error) => {
-        console.log("there has been a problem with your fetch operation", error.message);
-    })
-})
+//     fetch("https://cab230.hackhouse.sh/offences")
+//     .then((response) => {
+//         if (response.ok) {
+//             return response.json();
+//         }
+//         throw new Error("Network response was not ok.");
+//     })
+//     .then((result) => {
+//         return (result.offences)
+//     })
+//     .then((offences) => {
+//         let appDiv = document.getElementById("app");
+//         //appDiv.innerHTML = JSON.stringify(offences);
+//         ReactDOM.render(<OffencesApp offences={offences}/>, appDiv);
+//     })
+//     .catch((error) => {
+//         console.log("there has been a problem with your fetch operation", error.message);
+//     })
+// })
 
 const searchBtn = document.getElementById("serBtn");
 searchBtn.addEventListener("click", () => {
@@ -150,4 +151,5 @@ function FilterApp() {
     )
 }
 
+ReactDOM.render(<AppRouter />, document.getElementById('navbar'));
 ReactDOM.render(<FilterApp />, document.getElementById('filter'));
