@@ -1,155 +1,148 @@
-import React , {useState} from 'react';
+import React, {useState} from "react";
 import ReactDOM from 'react-dom';
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 import './index.css';
-import {AppRouter} from './test-routers';
+import OffencesPage from './offences';
+import SearchPage from './search';
+import {SearchBar} from './components';
+import {Input} from './components';
+import LoginPage from './login';
 
 let JWT = null;
 
-const registerBtn = document.getElementById("regBtn");
-registerBtn.addEventListener("click", () => {
-    //TODO: add fetch, not here for simplicity atm
-    //TODO: note, this is where we would use react router
-})
-const loginBtn = document.getElementById("logBtn");
-loginBtn.addEventListener("click", () => {
-   //TODO: note, this is where we would use react router
-   fetch("https://cab230.hackhouse.sh/login", {
-        method: "POST",
-        body: 'email=N10205144%40qut.edu.au&password=bubblewrap',
-        headers: {
-            "Content-type": "application/x-www-form-urlencoded"
+export function AppRouter() {
+    function Home() {
+        function HomeApp() {
+            return (
+                <div>
+                    <h3>Welcome to Crime Watch!</h3>
+                    <p>Here you can check out some crime data from all over Queensland! 
+                        You can choose which Local Government Area to display as well as which crimes, 
+                        the ages and sexes of the offenders, and the year that the offences occurred in. 
+                        Have fun sleeping at night now, i guess ¯\_(ツ)_/¯ </p>
+                </div>
+            )
         }
-    })
-        .then(function(response) {
-            if (response.ok) {
-                return response.json();
-            }
-            throw new Error("Network response was not ok.");
-        })
-        .then(function(result) {
-            let appDiv = document.getElementById("app");
-            appDiv.innerHTML = JSON.stringify(result);
-            JWT = result.token;
-        })
-        .catch(function(error) {
-            console.log("There has been a problem with your fetch operation: ",error.message);
-        });
-})
 
-// function OffencesApp(props) { //DEBUG:
-//     return (
-//         <div className="OffencesApp">
-//         <table>
-//             <thead><tr><th>Offences</th></tr></thead>
-//             <tbody>
-//             {props.offences.map((offence) =>(
-//                 <tr key={offence}><td>{offence}</td></tr>
-//             ))}
-//             </tbody>
-//         </table>
-//         </div>
-//     );
-// }
+        ReactDOM.render(<HomeApp />, document.getElementById("app"));
 
-// const offencesBtn = document.getElementById("offBtn");
-// offencesBtn.addEventListener("click", () => {
-//     //TODO: we would also use react router here
-//     //TODO: render to that DOM boi
+        return null;
+    }
 
-//     fetch("https://cab230.hackhouse.sh/offences")
-//     .then((response) => {
-//         if (response.ok) {
-//             return response.json();
-//         }
-//         throw new Error("Network response was not ok.");
-//     })
-//     .then((result) => {
-//         return (result.offences)
-//     })
-//     .then((offences) => {
-//         let appDiv = document.getElementById("app");
-//         //appDiv.innerHTML = JSON.stringify(offences);
-//         ReactDOM.render(<OffencesApp offences={offences}/>, appDiv);
-//     })
-//     .catch((error) => {
-//         console.log("there has been a problem with your fetch operation", error.message);
-//     })
-// })
+    function Offences() {
+        
+        function OffencesApp() {
+            const OffencesData = OffencesPage();
+            
+            return (
+                <div className="Offences">
+                <h2>List of offences:</h2>
+                <table>
+                    {/* <thead><tr><th>Offences</th></tr></thead>  */} {/* DEBUG: do i want this? how should offences be set out? */}
+                    <tbody>
+                    {OffencesData.map((offence) =>(
+                        <tr key={offence}><td>{offence}</td></tr>
+                    ))}
+                    </tbody>
+                </table>
+                </div>
+            );
+        }
 
-const searchBtn = document.getElementById("serBtn");
-searchBtn.addEventListener("click", () => {
-    //
-})
+        ReactDOM.render(<OffencesApp />, document.getElementById("app"));
 
-function SearchBar (props) { //TODO: make into search/filter dropdown https://www.w3schools.com/howto/howto_js_filter_dropdown.asp
-    const [innerSearch, setInnerSearch] = useState("");
+        return null;
+    }
+    
+    function Search() {
+      
+        function SearchApp() {
+            const SearchData = SearchPage();
+                
+            const [search, setSearch] = useState("");
 
-    return(
-        <div>
-            <label htmlFor="search">Search {props.labelText}: </label>
-            <input
-                aria-labelledby="search-button"
-                name="search"
-                id="search"
-                type="search"
-                value={innerSearch}
-                onChange={(event) => {
-                    const {value} = event.target;
-                    //TODO: data handling/checking
-                    setInnerSearch(value);
-                }}
-            />
-            <button
-                id="search-button"
-                type="search"
-                onClick={() => {
-                    props.onSubmit(innerSearch);
-                }}
-            >Search</button>
-        </div>
-    )
-}
+            return (
+                <div>
+                    <SearchBar onSubmit={setSearch} key="offencesSearch" labelText="offences"/>
+                    <SearchBar onSubmit={setSearch} key="areaSearch" labelText="areas"/>
+                    <SearchBar onSubmit={setSearch} key="ageSearch" labelText="ages"/>
+                    <button>Clear search criteria</button>
+                    <p>{search}</p>
+                </div>
+            )
+        }
 
-function Input() {
-    const [name, setName] = useState("");
-    const [error, setError] = useState(null)
+        ReactDOM.render(<SearchApp />, document.getElementById("app"));
 
-    return(
-        <div>
-            <label htmlFor="name">Your name:</label>
-            <input type="text"
-            name="name"
-            id="name"
-            value={name}
-            onChange={(event) => {
-                const {value} = event.target;
-                if (/[0-9]/.test(value)) {
-                    setError("Names shouldn't have numbers :/");
-                } else {
-                    setError(null);
-                }
-                setName(value);
-            }}/>
-            {
-                error != null ? <p>Error: {error}</p> : null
-            }
-        </div>
-    )
-}
+        return null;
+    }
+    
+    function Login() {
+        // const [email, setEmail] = useState("");
+        // const [password, setPassword] = useState("");
+        // setEmail("N10205144@qut.edu.au");
+        // setPassword("bubblewrap")
+        
+        let tester = LoginPage("N10205144@qut.edu.au", "bubblewrap");
 
-function FilterApp() {
-    const [search, setSearch] = useState("");
+        // function LoginApp() {
+        //     return (
+        //         <div className="Login">
+        //             <Input label="Email: " onSubmit={setEmail} key="email"/>
+        //             <Input label="Password: " onSubmit={setPassword} key="password"/>
+        //             <p>Email: {email}</p>
+        //             <p>Sneaky password peak: {password}</p>
+        //         </div>
+        //     )
+        // }
+        function LoginApp() {
+            return (
+                <div className="Login">
+                    <p>{tester}</p>
+                </div>
+            )
+        }
+
+        ReactDOM.render(<LoginApp />, document.getElementById("app"));
+        
+        return null;
+    }
+
+    function Register() {
+        return <h2>Register go here</h2>;
+    }
 
     return (
-        <div>
-            <SearchBar onSubmit={setSearch} key="offencesSearch" labelText="offences"/>
-            <SearchBar onSubmit={setSearch} key="areaSearch" labelText="areas"/>
-            <SearchBar onSubmit={setSearch} key="ageSearch" labelText="ages"/>
-            <button>Clear search criteria</button>
-            <p>{search}</p>
-        </div>
-    )
+    <Router>
+      <div>
+        <nav>
+          <ul>
+              <li>
+                  <Link to="/">Home</Link>
+              </li>
+            <li>
+                <Link to="/offences">Offences</Link>
+            </li>
+            <li>
+                <Link to="/search/">Search</Link>
+            </li>
+            <li>
+                <Link to="/login/">Login</Link>
+            </li>
+            <li>
+                <Link to="/register/">Register</Link>
+            </li>
+          </ul>
+        </nav>
+
+        <Route exact path="/" component={Home} />
+        <Route path="/offences" component={Offences} />
+        <Route path="/search/" component={Search} />
+        <Route path="/login/" component={Login} />
+        <Route path="/register/" component={Register} />
+      </div>
+    </Router>
+  );
 }
 
 ReactDOM.render(<AppRouter />, document.getElementById('navbar'));
-ReactDOM.render(<FilterApp />, document.getElementById('filter'));
