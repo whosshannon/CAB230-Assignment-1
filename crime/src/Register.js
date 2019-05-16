@@ -1,14 +1,14 @@
 import React, { useState } from "react";
 
-export function Login() {
+export function Register() {
     const [data, setData] = useState(null);
     let email, password = null;
 
-    const handleLoginFetch = function(email, password) {
+    const handleRegisterFetch = function(email, password) {
 
         let validEmail = email.replace("@", "%40");
         let fetchBody = "email="+validEmail+"&password="+password;
-        fetch("https://cab230.hackhouse.sh/login", {
+        fetch("https://cab230.hackhouse.sh/register", {
         method: "POST",
         body: fetchBody,
         headers: {
@@ -21,38 +21,38 @@ export function Login() {
                 throw new Error("Network response was not ok.");
             })
             .then(function(result) {
-                setData(JSON.stringify(result));
+                setData(JSON.stringify(result.message));
             })
             .catch(function(error) {
                 setData("There has been a problem with your fetch operation");
             });
     }
 
-    const handleLoginInfo = event => {
+    const handleRegisterInfo = event => {
         email = event.target.elements.email.value;
         password = event.target.elements.password.value;
-        handleLoginFetch(email, password);
+        handleRegisterFetch(email, password);
     }
 
     return (
         <div>
-            <LoginForm handleLoginInfo={handleLoginInfo}/>
+            <RegisterForm handleRegisterInfo={handleRegisterInfo}/>
             <p>{data}</p>
         </div>
     );
 }
 
-const LoginForm = props => {
+const RegisterForm = props => {
     return (
         <form onSubmit={(event) => {
             event.preventDefault();
 
-            props.handleLoginInfo(event);
+            props.handleRegisterInfo(event);
         }}>
             <label htmlFor="email">Email: </label>
-            <input id="email" type="text" defaultValue="N10205144@qut.edu.au"></input> {/* DEBUG:prefilled */}
+            <input id="email" type="text" ></input>
             <label htmlFor="password">Password: </label>
-            <input id="password" type="password" defaultValue="bubblewrap"></input> {/* DEBUG:prefilled */}
+            <input id="password" type="password"></input>
             <button type="submit">Login</button>
         </form>
     )
