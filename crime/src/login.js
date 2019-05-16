@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 
+export let JWT=null;
+
 export function Login() {
     const [data, setData] = useState(null);
     let email, password = null;
@@ -33,6 +35,8 @@ export function Login() {
         password = event.target.elements.password.value;
         handleLoginFetch(email, password);
     }
+
+    JWT=data;
 
     return (
         <div>

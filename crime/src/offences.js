@@ -6,24 +6,33 @@ export function Offences () {
     const handleOffencesData = event => {
         return fetch("https://cab230.hackhouse.sh/offences")
         .then((res)=>res.json()) //TODO: check response is okay??? like this works fine i think but i probably should check it just for proffessionalism i guess
-        .then((res)=>res.offences)
+        .then((res)=>{
+            setData(res.offences)
+        })
         .catch((error) => {
             console.log("there has been a problem with your fetch operation", error.message);
             return (<p>There was an error :/</p>)
         });
     }
-    const setOffencesData = event => {
-        setData(handleOffencesData);
-    }
+
+    handleOffencesData();
 
     return (
         <div>
         <h2>Offences</h2>
-        <p>The easiest thing to do is post on
-        our <a href="http://forum.kirupa.com">forums</a>.
-        </p>
+        <DisplayOffences data={data}/>
         </div>
     );
 }
- 
-export default Offences;
+
+const DisplayOffences = props => {
+    return (
+        <table>
+            <tbody>
+                {props.data.map((offence) => (
+                    <tr key={offence}><td>{offence}</td></tr>
+                ))}
+            </tbody>
+        </table>
+    )
+}

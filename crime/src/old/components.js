@@ -38,11 +38,11 @@ export function Input(props) {
 
     return(
         <div>
-            <label htmlFor="name">{props.label}</label>
+            <label htmlFor={props.label}>{props.label}</label>
             <input
             type="text"
-            name="name"
-            id="name"
+            name={props.label}
+            id={props.label}
             value={name}
             onChange={(event) => {
                 const {value} = event.target;
@@ -51,16 +51,16 @@ export function Input(props) {
                 // } else {
                 //     setError(null);
                 // }
-                if (!/[\s]/.test(value)) { //DEBUG: does not let user enter any whitespace at all
+                // if (!/[\s]/.test(value)) { //DEBUG: does not let user enter any whitespace at all
                     setName(value);
-                }
+                // }
             }}
             // onPointerLeave={() => {
             //     props.onSubmit(name);
             // }}
-            onBlur={() => {
-                props.onSubmit(name);
-            }}
+            // onBlur={() => {
+            //     props.onSubmit(name);
+            // }}
             />            
         </div>
     )
