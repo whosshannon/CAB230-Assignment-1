@@ -1,12 +1,61 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import { JWT } from "./Login";
 //import Select from "react-select";
 import { Input } from "./old/components";
  
 export function Search() {
-    let offenceTarget, areasTarget, agesTarget, gendersTarget, yearsTarget=null;
+    let offenceTarget, areasTarget, agesTarget, gendersTarget, yearsTarget, monthsTarget=null;
+    const [data, setData] = useState([]);
 
-    const handleSearchData = events => {
+    const handleSearchData = function() {
+        let query = "";
+
+        if (offenceTarget!==null && offenceTarget!=="") {
+            offenceTarget=offenceTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            query+="offence="+offenceTarget;
+        }
+        if (areasTarget!==null && areasTarget!=="") {
+            areasTarget=areasTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            query+="&area="+areasTarget;
+        }
+        if (agesTarget!==null && agesTarget!=="") {
+            agesTarget=agesTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            query+="&age="+agesTarget;
+        }
+        if (gendersTarget!==null && gendersTarget!=="") {
+            gendersTarget=gendersTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            query+="&gender="+gendersTarget;
+        }
+        if (yearsTarget!==null && yearsTarget!=="") {
+            yearsTarget=yearsTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            query+="&year="+yearsTarget;
+        }
+        if (monthsTarget!==null && monthsTarget!=="") {
+            monthsTarget=monthsTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            query+="&month="+monthsTarget;
+        }
+
+
+        let url = "https://cab230.hackhouse.sh/search?"+query;
+        console.log(url);
+
+        let getParam = { method: "GET" };
+        let head = { Authorization: `Bearer ${JWT}` };
+        getParam.headers = head;
+
+        fetch(encodeURI(url), getParam)
+            .then(function(response) {
+                if (response.ok) {
+                    return response.json();
+                }
+                throw new Error("Network response was not ok.");
+            })
+            .then(function(result) {
+                setData(result);
+            })
+            .catch(function(error) {
+                setData("There has been a problem with your fetch operation");
+            });
         
     }
 
@@ -21,73 +70,31 @@ export function Search() {
             agesTarget=event.target.elements.Ages.value;
             gendersTarget=event.target.elements.Genders.value;
             yearsTarget=event.target.elements.Years.value;
+            monthsTarget=event.target.elements.Months.value;
+
+            handleSearchData()
         }}>
         <Input label="Offence"/>
         <Input label="Areas"/>
         <Input label="Ages"/>
         <Input label="Genders"/>
         <Input label="Years"/>
+        <Input label="Months" />
         <button type="submit">Search!</button>
+        <DisplayData data={data}/>
         </form>
+
       </div>
     );
 }
 
-// const Input = props => {
-//     const [name, setName] = useState("");
-
-//     return(
-//         <div>
-//             <label htmlFor="name">{props.label}</label>
-//             <input
-//             type="text"
-//             name="name"
-//             id="name"
-//             value={name}
-//             onChange={(event) => {
-//                 const {value} = event.target;
-//                 //if (!/[\s]/.test(value)) { //DEBUG: does not let user enter any whitespace at all
-//                     setName(value);
-//                 //}
-//             }}
-//             onBlur={() => {
-//                 props.onSubmit(name);
-//             }}
-//             />            
-//         </div>
-//     )
-// }
- 
-
-// const notsomuch = (name) => {
-//     let data=null;
-
-//     const handleOffencesData = event => {
-//         return fetch("https://cab230.hackhouse.sh/offences")
-//         .then((res)=>res.json()) //TODO: check response is okay??? like this works fine i think but i probably should check it just for proffessionalism i guess
-//         .then((res)=>{
-//             data = res.offences;
-//         })
-//         .catch((error) => {
-//             console.log("there has been a problem with your fetch operation", error.message);
-//             return (<p>There was an error :/</p>)
-//         });
-//     }
-    
-//     const options = [
-//         // handleOffencesData().map((item) => (
-//         //     {value: item, label: item}
-//         // ))
-//         {value: 'Stanford University', label: 'Stanford'},
-//     ]
-//     console.log(handleOffencesData());
-
-//     return (
-//         <Select
-//         name={name}
-//         value="one"
-//         options={options}
-//         onChange={val => console.log(val)}
-//     />
-//     )
-// }
+const DisplayData = props => {
+    return (
+        <div>
+            {/* {props.data.map((item) => (
+                <p>{item}</p>
+            ))} */}
+            <p>{JSON.stringify(props.data)}</p>
+        </div>
+    )
+}

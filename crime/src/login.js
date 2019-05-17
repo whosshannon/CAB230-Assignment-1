@@ -23,7 +23,7 @@ export function Login() {
                 throw new Error("Network response was not ok.");
             })
             .then(function(result) {
-                setData(JSON.stringify(result));
+                setData(result.token);
             })
             .catch(function(error) {
                 setData("There has been a problem with your fetch operation");
