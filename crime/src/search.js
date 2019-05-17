@@ -16,7 +16,7 @@ export function Search() {
         }
         if (areasTarget!==null && areasTarget!=="") {
             areasTarget=areasTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
-            query+="&area="+areasTarget;
+            query+="&LGA="+areasTarget;
         }
         if (agesTarget!==null && agesTarget!=="") {
             agesTarget=agesTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
@@ -51,7 +51,7 @@ export function Search() {
                 throw new Error("Network response was not ok.");
             })
             .then(function(result) {
-                setData(result);
+                setData(result.result);
             })
             .catch(function(error) {
                 setData("There has been a problem with your fetch operation");
@@ -91,9 +91,22 @@ export function Search() {
 const DisplayData = props => {
     return (
         <div>
-            {/* {props.data.map((item) => (
-                <p>{item}</p>
-            ))} */}
+            <table>
+                <thead>
+                <tr>
+                    <th>Area</th>
+                    <th>Total</th>
+                </tr>
+                </thead>
+                <tbody>
+            {props.data.map((item) => (
+                <tr key={item.LGA}>
+                <td>{item.LGA}</td>
+                <td>{item.total}</td>
+                </tr>
+            ))}
+            </tbody>
+            </table>
             <p>{JSON.stringify(props.data)}</p>
         </div>
     )
