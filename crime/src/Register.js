@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 
 export function Register() {
+    //TODO: only login once
+    //TODO: actual error messages
+    //TODO: prepopulate login screen 
     const [data, setData] = useState(null);
     let email, password = null;
 
@@ -46,7 +49,6 @@ const RegisterForm = props => {
     return (
         <form onSubmit={(event) => {
             event.preventDefault();
-
             props.handleRegisterInfo(event);
         }}>
             <label htmlFor="email">Email: </label>

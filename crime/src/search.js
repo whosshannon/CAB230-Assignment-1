@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { JWT } from "./Login";
 //import Select from "react-select";
-import { Input } from "./old/components";
  
 export function Search() {
+    //TODO: pop in some graphs, maps, ect - may need to use graph.js version two because it's react
     let offenceTarget, areasTarget, agesTarget, gendersTarget, yearsTarget, monthsTarget=null;
     const [data, setData] = useState([]);
 
@@ -14,12 +14,13 @@ export function Search() {
             offenceTarget=offenceTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
             query+="offence="+offenceTarget;
         }
-        if (areasTarget!==null && areasTarget!=="") {
+        if (areasTarget!==null && areasTarget!=="") { //TODO: In page filtering for area `\_('-')_/`
             areasTarget=areasTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
-            query+="&LGA="+areasTarget;
+            query+="&area="+areasTarget;
         }
         if (agesTarget!==null && agesTarget!=="") {
             agesTarget=agesTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+         
             query+="&age="+agesTarget;
         }
         if (gendersTarget!==null && gendersTarget!=="") {
@@ -36,7 +37,7 @@ export function Search() {
         }
 
 
-        let url = "https://cab230.hackhouse.sh/search?"+query;
+        let url = "https://cab230.hackhouse.sh/search?"+query; //FIXME: filter locally?
         console.log(url);
 
         let getParam = { method: "GET" };
@@ -74,18 +75,40 @@ export function Search() {
 
             handleSearchData()
         }}>
-        <Input label="Offence"/>
+            {/* TODO: be able to see all the offences, areas, ages, ect. when searching */}
+        <Input label="Offence"/> {/* TODO: offence cannot be null */}
         <Input label="Areas"/>
         <Input label="Ages"/>
         <Input label="Genders"/>
         <Input label="Years"/>
         <Input label="Months" />
         <button type="submit">Search!</button>
-        <DisplayData data={data}/>
+        <hr></hr>
+        <DisplayData data={data}/> {/*TODO: make readily sortable from column heads*/}
         </form>
 
       </div>
     );
+}
+
+const Input = props => {
+    const [name, setName] = useState("");
+
+    return(
+        <div>
+            <label htmlFor={props.label}>{props.label}</label>
+            <input
+            type="text"
+            name={props.label}
+            id={props.label}
+            value={name}
+            onChange={(event) => {
+                const {value} = event.target;
+                    setName(value);
+            }}
+            />            
+        </div>
+    )
 }
 
 const DisplayData = props => {

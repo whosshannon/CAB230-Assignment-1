@@ -34,7 +34,6 @@ export function SearchBar (props) { //TODO: make into search/filter dropdown htt
 
 export function Input(props) {
     const [name, setName] = useState("");
-    //const [error, setError] = useState(null)
 
     return(
         <div>
@@ -46,21 +45,8 @@ export function Input(props) {
             value={name}
             onChange={(event) => {
                 const {value} = event.target;
-                // if (/[0-9]/.test(value)) {
-                //     setError("Names shouldn't have numbers :/");
-                // } else {
-                //     setError(null);
-                // }
-                // if (!/[\s]/.test(value)) { //DEBUG: does not let user enter any whitespace at all
                     setName(value);
-                // }
             }}
-            // onPointerLeave={() => {
-            //     props.onSubmit(name);
-            // }}
-            // onBlur={() => {
-            //     props.onSubmit(name);
-            // }}
             />            
         </div>
     )
