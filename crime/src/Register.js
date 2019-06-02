@@ -5,6 +5,7 @@ export function Register() {
     //TODO: actual error messages
     //TODO: prepopulate login screen 
     const [data, setData] = useState(null);
+    const [successful, setSuccessful] = useState(null);
     let email, password = null;
 
     const handleRegisterFetch = function(email, password) {
@@ -25,9 +26,11 @@ export function Register() {
             })
             .then(function(result) {
                 setData(JSON.stringify(result.message));
+                setSuccessful(true);
             })
             .catch(function(error) {
                 setData("There has been a problem with your fetch operation");
+                setSuccessful(false);
             });
     }
 
@@ -37,10 +40,20 @@ export function Register() {
         handleRegisterFetch(email, password);
     }
 
+    let loginText;
+    if (successful===true) {
+        loginText="Successfully registerd! Make sure you log in as well"
+    } else if (successful===false) {
+        loginText="Looks like there was a problem registering";
+    } else {
+        loginText=null;
+    }
+
     return (
         <div>
+            <p></p>
             <RegisterForm handleRegisterInfo={handleRegisterInfo}/>
-            <p>{data}</p>
+            <p>{loginText}</p>
         </div>
     );
 }

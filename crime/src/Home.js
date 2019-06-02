@@ -2,28 +2,21 @@ import React from "react";
 import { JWT } from "./Login";
  
 export function Home() {
+
+    let loginText;
+    if (JWT == null) {
+        loginText="Please login to use search functionality!"
+    } else {
+        loginText=null;
+    }
     
     return (
         <div>
         <h2>Welcome to CrimeWatch</h2>
         <p>Look up crime data specific to what you care about!</p>
 
-        <p>Have fun sleeping at night tho :/</p>
-        
-        <p id="shouldLogin"></p>
+        <p style={{color: 'red'}}><br></br>{loginText}</p>
 
         </div>
         );
-}
-
-const plz = props => {
-    return (
-        <div>
-            <hr></hr>
-            <p id="shouldLogin" style={{color:'red'}}> {/*TODO: don't show when actually logged in, duh*/}
-                Please note; you are not logged in. Please login to access the search functionality
-            </p>
-
-        </div>
-    )
 }

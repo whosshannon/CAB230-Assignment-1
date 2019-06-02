@@ -11,33 +11,32 @@ export function Search() {
         let query = "";
 
         if (offenceTarget!==null && offenceTarget!=="") {
-            offenceTarget=offenceTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            offenceTarget = encodeURI(offenceTarget);
             query+="offence="+offenceTarget;
         }
-        if (areasTarget!==null && areasTarget!=="") { //TODO: In page filtering for area `\_('-')_/`
-            areasTarget=areasTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+        if (areasTarget!==null && areasTarget!=="") {
+            areasTarget = encodeURI(areasTarget);
             query+="&area="+areasTarget;
         }
         if (agesTarget!==null && agesTarget!=="") {
-            agesTarget=agesTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
-         
+            agesTarget = encodeURI(agesTarget);
             query+="&age="+agesTarget;
         }
         if (gendersTarget!==null && gendersTarget!=="") {
-            gendersTarget=gendersTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            gendersTarget = encodeURI(gendersTarget);
             query+="&gender="+gendersTarget;
         }
         if (yearsTarget!==null && yearsTarget!=="") {
-            yearsTarget=yearsTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            yearsTarget = encodeURI(yearsTarget);
             query+="&year="+yearsTarget;
         }
         if (monthsTarget!==null && monthsTarget!=="") {
-            monthsTarget=monthsTarget.replace(/,/g, '%2C').replace(/ /g, '%20');
+            monthsTarget = encodeURI(monthsTarget);
             query+="&month="+monthsTarget;
         }
 
 
-        let url = "https://cab230.hackhouse.sh/search?"+query; //FIXME: filter locally?
+        let url = "https://cab230.hackhouse.sh/search?"+query; 
         console.log(url);
 
         let getParam = { method: "GET" };
@@ -60,10 +59,17 @@ export function Search() {
         
     }
 
+    let loginText;
+    if (JWT == null) {
+        loginText="Please login to use search functionality!"
+    } else {
+        loginText=null;
+    }
+
     return (
       <div>
         <h2>Search</h2>
-        <p>{JWT}</p>
+        <p style={{color: 'red'}}>{loginText}</p>
         <form onSubmit={(event) =>{
             event.preventDefault();
             offenceTarget=event.target.elements.Offence.value;
@@ -83,6 +89,7 @@ export function Search() {
         <Input label="Years"/>
         <Input label="Months" />
         <button type="submit">Search!</button>
+        <p>Note that an offence is required</p>
         <hr></hr>
         <DisplayData data={data}/> {/*TODO: make readily sortable from column heads*/}
         </form>
@@ -130,7 +137,7 @@ const DisplayData = props => {
             ))}
             </tbody>
             </table>
-            <p>{JSON.stringify(props.data)}</p>
+            {/* <p>{JSON.stringify(props.data)}</p> */}
         </div>
     )
 }
