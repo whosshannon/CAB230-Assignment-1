@@ -68,9 +68,9 @@ const LoginForm = props => {
             props.handleLoginInfo(event);
         }}>
             <label htmlFor="email">Email: </label>
-            <input id="email" type="text"></input> {/* DEBUG:prefilled */}
+            <input id="email" type="text" defaultValue="N10205144@qut.edu.au"></input> {/* DEBUG:prefilled */}
             <label htmlFor="password">Password: </label>
-            <input id="password" type="password"></input> {/* DEBUG:prefilled */}
+            <input id="password" type="password" defaultValue="bubblewrap"></input> {/* DEBUG:prefilled */}
             <button type="submit">Login</button>
         </form>
     )

@@ -42,7 +42,7 @@ export function Register() {
 
     let loginText;
     if (successful===true) {
-        loginText="Successfully registerd! Make sure you log in as well"
+        loginText="Successfully registered! Make sure you log in as well"
     } else if (successful===false) {
         loginText="Looks like there was a problem registering";
     } else {

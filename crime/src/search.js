@@ -11,39 +11,40 @@ export function Search() {
         let query = "";
 
         if (offenceTarget!==null && offenceTarget!=="") {
-            offenceTarget = encodeURI(offenceTarget);
+            offenceTarget=offenceTarget.replace(/, /g, '%2C%20').replace(/ /g, '%20');
+            // offenceTarget = encodeURI(offenceTarget);
             query+="offence="+offenceTarget;
+            console.log(offenceTarget);
         }
         if (areasTarget!==null && areasTarget!=="") {
-            areasTarget = encodeURI(areasTarget);
+            areasTarget = areasTarget.replace(/, /g, '%2C%20').replace(/ /g, '%20');
             query+="&area="+areasTarget;
         }
         if (agesTarget!==null && agesTarget!=="") {
-            agesTarget = encodeURI(agesTarget);
+            agesTarget = agesTarget.replace(/, /g, '%2C%20').replace(/ /g, '%20');
             query+="&age="+agesTarget;
         }
         if (gendersTarget!==null && gendersTarget!=="") {
-            gendersTarget = encodeURI(gendersTarget);
+            gendersTarget = gendersTarget.replace(/, /g, '%2C%20').replace(/ /g, '%20');
             query+="&gender="+gendersTarget;
         }
         if (yearsTarget!==null && yearsTarget!=="") {
-            yearsTarget = encodeURI(yearsTarget);
+            yearsTarget = yearsTarget.replace(/, /g, '%2C%20').replace(/ /g, '%20');
             query+="&year="+yearsTarget;
         }
         if (monthsTarget!==null && monthsTarget!=="") {
-            monthsTarget = encodeURI(monthsTarget);
+            monthsTarget = monthsTarget.replace(/, /g, '%2C%20').replace(/ /g, '%20');
             query+="&month="+monthsTarget;
         }
 
 
-        let url = "https://cab230.hackhouse.sh/search?"+query; 
-        console.log(url);
+        let url = "https://cab230.hackhouse.sh/search?"+query;
 
         let getParam = { method: "GET" };
         let head = { Authorization: `Bearer ${JWT}` };
         getParam.headers = head;
 
-        fetch(encodeURI(url), getParam)
+        fetch(url, getParam)
             .then(function(response) {
                 if (response.ok) {
                     return response.json();
@@ -119,25 +120,36 @@ const Input = props => {
 }
 
 const DisplayData = props => {
-    return (
-        <div>
-            <table>
-                <thead>
-                <tr>
-                    <th>Area</th>
-                    <th>Total</th>
-                </tr>
-                </thead>
-                <tbody>
-            {props.data.map((item) => (
-                <tr key={item.LGA}>
-                <td>{item.LGA}</td>
-                <td>{item.total}</td>
-                </tr>
-            ))}
-            </tbody>
-            </table>
-            {/* <p>{JSON.stringify(props.data)}</p> */}
-        </div>
-    )
+    let returnComponent;
+    try{
+        returnComponent = (
+            <div>
+                <table>
+                    <thead>
+                    <tr>
+                        <th>Area</th>
+                        <th>Total</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                {props.data.map((item) => (
+                    <tr key={item.LGA}>
+                    <td>{item.LGA}</td>
+                    <td>{item.total}</td>
+                    </tr>
+                ))}
+                </tbody>
+                </table>
+                {/* <p>{JSON.stringify(props.data)}</p> */}
+            </div>
+        )
+    }
+    catch (err) {
+        returnComponent = (
+            <div>
+                <p>Looks like there was a problem with your search</p>
+            </div>
+        )
+    }
+    return returnComponent
 }

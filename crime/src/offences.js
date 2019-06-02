@@ -5,7 +5,7 @@ export function Offences () {
 
     const handleOffencesData = event => {
         return fetch("https://cab230.hackhouse.sh/offences")
-        .then((res)=>res.json()) //TODO: check response is okay??? like this works fine i think but i probably should check it just for proffessionalism i guess
+        .then((res)=>res.json())
         .then((res)=>{
             setData(res.offences)
         })
